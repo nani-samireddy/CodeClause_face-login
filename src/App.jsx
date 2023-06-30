@@ -8,31 +8,27 @@ function App() {
  const [faceio, setFaceio] = useState(null);
 
  useEffect(() => {
-   setFaceio(new faceIO("fioa3854"));
+   setFaceio(new faceIO(import.meta.env.VITE_FACEIO_APP_ID));
  }, []);
 
+ const handleSignIn = async () => {
+   try {
+     let response = await faceio.enroll({
+       locale: "auto",
+       payload: {
+         email: "example@gmail.com",
+         pin: "12345",
+       },
+     });
 
-
-const handleSignIn = async () => {
-  try {
-    let response = await faceio.enroll({
-      locale: "auto",
-      payload: {
-        email: "nanisamireddy05@gmail.com",
-        pin: "12345",
-      },
-    });
-
-    console.log(` Unique Facial ID: ${response.facialId}
+     console.log(` Unique Facial ID: ${response.facialId}
       Enrollment Date: ${response.timestamp}
       Gender: ${response.details.gender}
       Age Approximation: ${response.details.age}`);
-  } catch (error) {
-    console.log(error);
-  }
-
-  
-};
+   } catch (error) {
+     console.log(error);
+   }
+ };
 
 const handleLogIn = async () => {
   try {
@@ -53,6 +49,7 @@ const handleLogIn = async () => {
     <>
       <section>
         <h1>Face Authentication by FaceIO</h1>
+        <p>Make sure you give the camera permission</p>
         <button onClick={handleLogIn}>Log-in</button>
         <button onClick={handleSignIn}>Sign-Up</button>
       </section>
